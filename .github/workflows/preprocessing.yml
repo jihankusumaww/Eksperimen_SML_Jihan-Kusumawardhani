@@ -1,0 +1,59 @@
+name: Preprocessing Workflow
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  preprocessing:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install pandas scikit-learn joblib numpy
+
+    - name: Run preprocessing
+      run: |
+        python run_preprocessing.py
+
+    - name: Verify preprocessing output
+      run: |
+        echo "Checking preprocessed files..."
+        ls -lh preprocessing/insurance_preprocessing/
+        echo "Training dataset:"
+        head -5 preprocessing/insurance_preprocessing/insurance_train_preprocessed.csv
+        echo "Test dataset:"
+        head -5 preprocessing/insurance_preprocessing/insurance_test_preprocessed.csv
+
+    - name: Upload preprocessed dataset
+      uses: actions/upload-artifact@v4
+      with:
+        name: preprocessed-data-${{ github.sha }}
+        path: |
+          preprocessing/insurance_preprocessing/*.csv
+          preprocessing/preprocessor.joblib
+          preprocessing/columns.csv
+        retention-days: 90
+
+    - name: Upload training dataset
+      uses: actions/upload-artifact@v4
+      with:
+        name: train-data
+        path: preprocessing/insurance_preprocessing/insurance_train_preprocessed.csv
+
+    - name: Upload test dataset
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-data
+        path: preprocessing/insurance_preprocessing/insurance_test_preprocessed.csv
