@@ -1,7 +1,5 @@
 # Insurance Data Preprocessing Pipeline
 
-![Preprocessing Pipeline](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/preprocessing.yml/badge.svg)
-
 Proyek ini melakukan preprocessing otomatis pada dataset asuransi menggunakan scikit-learn pipeline.
 
 ## Fitur
