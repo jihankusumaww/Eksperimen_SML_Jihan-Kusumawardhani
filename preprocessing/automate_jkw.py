@@ -123,9 +123,8 @@ def preprocess_data(data, target_column, save_path, file_path):
         mse = mean_squared_error(y_test_arr, y_pred)
         r2 = r2_score(y_test_arr, y_pred)
 
-        # Log model ke MLflow
+            # Log model ke MLflow
         mlflow.log_metric('mse', mse)
         mlflow.log_metric('r2', r2)
         mlflow.sklearn.log_model(model, 'model')
-
         return X_train_final, X_test_final, y_train_clean, y_test
